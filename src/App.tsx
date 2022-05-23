@@ -1,24 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import "./App.css";
+import Admin from "./pages/Admin";
+import Details from "./pages/Details";
+import Home from "./pages/Home";
+import Notfound from "./pages/Notfound";
+
+function RequireAuth({ children }: { children: JSX.Element }) {
+  let auth = { user: "" };
+  let location = useLocation();
+  if (auth.user === "") {
+    // Redirect them to the /login page, but save the current location they were
+    // trying to go to when they were redirected. This allows us to send them
+    // along to that page after they login, which is a nicer user experience
+    // than dropping them off on the home page.
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
+
+  return children;
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="details/:articleId" element={<Details />} />
+        <Route
+          path="admin"
+          element={
+            <RequireAuth>
+              <Admin />
+            </RequireAuth>
+          }
+        />
+        <Route path="*" element={<Notfound />} />
+      </Routes>
     </div>
   );
 }
