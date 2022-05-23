@@ -1,10 +1,12 @@
 import React from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
-import Admin from "./pages/Admin";
 import Details from "./pages/Details";
 import Home from "./pages/Home";
 import Notfound from "./pages/Notfound";
+
+//for git page in package.json
+//"homepage": "https://andreippsq.github.io/react-tema",
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   let auth = { user: "" };
@@ -26,14 +28,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="details/:articleId" element={<Details />} />
-        <Route
-          path="admin"
-          element={
-            <RequireAuth>
-              <Admin />
-            </RequireAuth>
-          }
-        />
         <Route path="*" element={<Notfound />} />
       </Routes>
     </div>
